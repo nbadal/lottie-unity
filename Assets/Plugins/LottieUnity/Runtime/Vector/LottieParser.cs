@@ -105,7 +105,6 @@ namespace Lottie.Vector
         private void TraverseLayers(Layer layer, Action<Layer, SceneNode> action)
         {
             if (!_layerNodes.TryGetValue(layer, out var node)) return;
-            Debug.Log($"Traversing layer {layer.Name} ({layer.Index})");
             action(layer, node);
             foreach (var child in node.Children)
             {

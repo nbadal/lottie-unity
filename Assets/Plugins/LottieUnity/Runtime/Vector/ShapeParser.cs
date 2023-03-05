@@ -12,47 +12,14 @@ namespace Lottie.Vector
     {
         internal static void ParseShapes(this LottieParser parser, List<Shape> shapes, SceneNode layerNode)
         {
-            for (var i = shapes.Count - 1; i >= 0; i--)
-            {
-                var shape = shapes[i];
-                switch (shape)
-                {
-                    case GroupShape gr:
-                        var groupNode = new SceneNode
-                        {
-                            Children = new List<SceneNode>(),
-                        };
-                        parser.ParseGroupShapes(gr.Shapes, groupNode);
-                        layerNode.Children.Add(groupNode);
-                        break;
-                    case RectangleShape rc:
-                    case EllipseShape el:
-                    case PolystarShape sr:
-                    case PathShape sh:
-                    case FillShape fl:
-                    case StrokeShape st:
-                    case GradientFillShape gf:
-                    case GradientStrokeShape gs:
-                    case NoStyleShape no:
-                    case TransformShape tr:
-                    case RepeaterShape rp:
-                    case TrimShape tm:
-                    case RoundedCornersShape rd:
-                    case PuckerBloatShape pb:
-                    case MergeShape mm:
-                    case TwistShape tw:
-                    case OffsetPathShape op:
-                    case ZigZagShape zz:
-                        throw new NotImplementedException();
-                }
-            }
+            ParseGroupShapes(parser, shapes, layerNode);
         }
 
         private static void ParseGroupShapes(this LottieParser parser, List<Shape> grShapes, SceneNode groupNode)
         {
             IFill fill = null;
             PathProperties? pathProps = null;
-            Matrix2D? transform = null;
+            Matrix2D transform = Matrix2D.identity;
 
             // Iterate through shapes in reverse order
             for (var i = grShapes.Count - 1; i >= 0; i--)
@@ -179,9 +146,7 @@ namespace Lottie.Vector
                         break;
                 }
             }
-
-            if (transform == null) throw new ArgumentException("Missing transform for group");
-            groupNode.Transform = transform.Value;
+            groupNode.Transform = transform;
         }
 
         private static float[] MakeDashPattern(List<StrokeDash> stDashes, out float patternOffset)
