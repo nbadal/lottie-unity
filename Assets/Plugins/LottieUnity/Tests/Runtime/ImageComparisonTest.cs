@@ -19,8 +19,8 @@ public class ImageComparisonTest
     [Test, TestCaseSource(nameof(GetComparisonNames))]
     public void CompareSvg(string name)
     {
-        var svg = SVGParser.ImportSVG(new StringReader(Resources.Load<TextAsset>($"svg/{name}.svg").text));
-        var lottie = LottieParser.Parse(Resources.Load<TextAsset>($"lottie/{name}").text);
+        var svg = SVGParser.ImportSVG(new StringReader(Resources.Load<TextAsset>($"compare/{name}.svg").text));
+        var lottie = LottieParser.Parse(Resources.Load<TextAsset>($"compare/{name}").text);
 
         var txtSvg = RenderSceneTexture2D(svg.Scene);
         var txtLottie = RenderSceneTexture2D(lottie.Scene);
@@ -32,11 +32,14 @@ public class ImageComparisonTest
         ImageAssert.AreEqual(txtSvg, txtLottie, settings);
     }
 
-    public static string[] GetComparisonNames() =>
-        Directory.GetFiles(Application.dataPath + "/Resources/svg", "*.svg.txt", SearchOption.TopDirectoryOnly)
-            .Select(Path.GetFileName)
-            .Select(filename => filename.Substring(0, filename.IndexOf('.')))
+    public static string[] GetComparisonNames()
+    {
+        var comparisonsPath = Application.dataPath + "/Resources/compare/";
+        return Directory.GetFiles(comparisonsPath, "*.svg.txt", SearchOption.AllDirectories)
+            .Select(absPath => absPath.Substring(comparisonsPath.Length, absPath.Length - comparisonsPath.Length))
+            .Select(relPath => relPath.Substring(0, relPath.IndexOf('.', relPath.LastIndexOf('/'))))
             .ToArray();
+    }
 
     private static Texture2D RenderSceneTexture2D(Scene svgScene)
     {
