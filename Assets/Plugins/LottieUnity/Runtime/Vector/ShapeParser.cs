@@ -144,8 +144,70 @@ namespace Lottie.Vector
                             Shapes = new List<Unity.VectorGraphics.Shape> { rectShape },
                         });
                         break;
+                    case PathShape sh:
+                        if (sh.Shape.IsAnimated == 1)
+                        {
+                            throw new NotImplementedException();
+                        }
+
+                        var pathShape = new Unity.VectorGraphics.Shape();
+                        var shapeData = sh.Shape.Value;
+                        var bezierSegments = new BezierSegment[shapeData.SegmentCount];
+                        for (var segment = 0; segment < shapeData.SegmentCount; segment++)
+                        {
+                            var bezierData = shapeData.Segment(segment);
+                            var bezier = new BezierSegment
+                            {
+                                P0 = new Vector2((float)bezierData.Item1[0], (float)bezierData.Item1[1]),
+                                P1 = new Vector2((float)bezierData.Item2[0], (float)bezierData.Item2[1]),
+                                P2 = new Vector2((float)bezierData.Item3[0], (float)bezierData.Item3[1]),
+                                P3 = new Vector2((float)bezierData.Item4[0], (float)bezierData.Item4[1]),
+                            };
+                            bezierSegments[segment] = bezier;
+                        }
+
+                        var path = VectorUtils.BezierSegmentsToPath(bezierSegments);
+                        if (!(shapeData.Closed ?? false))
+                        {
+                            // TODO: This feels hacky - probably a cleaner way to do this in the SVG parser
+                            // Set all elements of the last segment to p0
+                            var lastSegment = path[path.Length - 1];
+                            lastSegment.P1 = lastSegment.P0;
+                            lastSegment.P2 = lastSegment.P0;
+                            path[path.Length - 1] = lastSegment;
+                        }
+                        pathShape.Contours = new[]
+                        {
+                            new BezierContour
+                            {
+                                Segments = path,
+                                Closed = shapeData.Closed ?? false
+                            }
+                        };
+                        if (fill != null) pathShape.Fill = fill;
+                        if (pathProps != null) pathShape.PathProps = pathProps.Value;
+
+                        groupNode.Children.Add(new SceneNode
+                        {
+                            Shapes = new List<Unity.VectorGraphics.Shape> { pathShape },
+                        });
+                        break;
+                    case PolystarShape sr:
+                    case GradientFillShape gf:
+                    case GradientStrokeShape gs:
+                    case NoStyleShape no:
+                    case RepeaterShape rp:
+                    case TrimShape tm:
+                    case RoundedCornersShape rd:
+                    case PuckerBloatShape pb:
+                    case MergeShape mm:
+                    case TwistShape tw:
+                    case OffsetPathShape op:
+                    case ZigZagShape zz:
+                        throw new NotImplementedException();
                 }
             }
+
             groupNode.Transform = transform;
         }
 

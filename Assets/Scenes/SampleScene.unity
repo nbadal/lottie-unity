@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f164e5a597642a7975b645063f7da70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lottieAsset: {fileID: 4900000, guid: 50bbcb8c24724185b15df2b65f6a7989, type: 3}
+  lottieAsset: {fileID: 4900000, guid: 3d48db1e5b164a899bcc9adc17611220, type: 3}
 --- !u!4 &2014525295
 Transform:
   m_ObjectHideFlags: 0
