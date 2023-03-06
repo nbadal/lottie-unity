@@ -54,59 +54,59 @@ namespace Lottie.Model
     [JsonConverter(typeof(ShapeConverter))]
     public class Shape
     {
-        [JsonProperty("nm")] public string Name { get; set; }
+        [JsonProperty("nm")] public string Name;
 
-        [JsonProperty("mn")] public string MatchName { get; set; }
+        [JsonProperty("mn")] public string MatchName;
 
-        [JsonProperty("hd")] public bool? Hidden { get; set; }
+        [JsonProperty("hd")] public bool? Hidden;
 
-        [JsonProperty("ty")] [JsonRequired] public string Type { get; set; }
+        [JsonProperty("ty")] [JsonRequired] public string Type;
 
-        [JsonProperty("bm")] public BlendMode? BlendMode { get; set; }
+        [JsonProperty("bm")] public BlendMode? BlendMode;
 
-        [JsonProperty("ix")] public int? PropertyIndex { get; set; }
+        [JsonProperty("ix")] public int? PropertyIndex;
 
-        [JsonProperty("cl")] public string CssClass { get; set; }
+        [JsonProperty("cl")] public string CssClass;
 
-        [JsonProperty("ln")] public string LayerXmlId { get; set; }
+        [JsonProperty("ln")] public string LayerXmlId;
     }
 
     public class ShapeWithDirection : Shape
     {
-        [JsonProperty("d")] public ShapeDirection Direction { get; set; }
+        [JsonProperty("d")] public ShapeDirection Direction;
     }
 
     class EllipseShape : ShapeWithDirection
     {
-        [JsonProperty("p")] [JsonRequired] public AnimatedPosition Position { get; set; }
+        [JsonProperty("p")] [JsonRequired] public AnimatedPosition Position;
 
-        [JsonProperty("s")] [JsonRequired] public AnimatedVector Size { get; set; }
+        [JsonProperty("s")] [JsonRequired] public AnimatedVector Size;
     }
 
     class FillShape : Shape
     {
-        [JsonProperty("o")] [JsonRequired] public AnimatedValue Opacity { get; set; }
+        [JsonProperty("o")] [JsonRequired] public AnimatedValue Opacity;
 
-        [JsonProperty("c")] [JsonRequired] public AnimatedColor Color { get; set; }
+        [JsonProperty("c")] [JsonRequired] public AnimatedColor Color;
 
-        [JsonProperty("r")] public FillRule? FillRule { get; set; }
+        [JsonProperty("r")] public FillRule? FillRule;
     }
 
     class GradientShape : Shape
     {
-        [JsonProperty("s")] [JsonRequired] public AnimatedVector StartPoint { get; set; }
+        [JsonProperty("s")] [JsonRequired] public AnimatedVector StartPoint;
 
-        [JsonProperty("e")] [JsonRequired] public AnimatedVector EndPoint { get; set; }
+        [JsonProperty("e")] [JsonRequired] public AnimatedVector EndPoint;
 
-        [JsonProperty("g")] [JsonRequired] public AnimatedGradient Colors { get; set; }
+        [JsonProperty("g")] [JsonRequired] public AnimatedGradient Colors;
 
-        [JsonProperty("t")] public GradientType? GradientType { get; set; }
+        [JsonProperty("t")] public GradientType? GradientType;
 
         // Radial:
 
-        [JsonProperty("h")] public AnimatedValue HighlightLength { get; set; }
+        [JsonProperty("h")] public AnimatedValue HighlightLength;
 
-        [JsonProperty("a")] public AnimatedValue HighlightAngle { get; set; }
+        [JsonProperty("a")] public AnimatedValue HighlightAngle;
     }
 
     enum FillRule
@@ -123,61 +123,61 @@ namespace Lottie.Model
 
     class GradientFillShape : GradientShape
     {
-        [JsonProperty("o")] [JsonRequired] public AnimatedValue Opacity { get; set; }
+        [JsonProperty("o")] [JsonRequired] public AnimatedValue Opacity;
 
-        [JsonProperty("r")] public FillRule? FillRule { get; set; }
+        [JsonProperty("r")] public FillRule? FillRule;
     }
 
     class GradientStrokeShape : GradientShape
     {
-        [JsonProperty("lc")] public LineCap? LineCap { get; set; }
+        [JsonProperty("lc")] public LineCap? LineCap;
 
-        [JsonProperty("lj")] public LineJoin? LineJoin { get; set; }
+        [JsonProperty("lj")] public LineJoin? LineJoin;
 
-        [JsonProperty("ml")] public double? MiterLimit { get; set; }
+        [JsonProperty("ml")] public double? MiterLimit;
 
-        [JsonProperty("ml2")] public AnimatedValue AnimatedMiterLimit { get; set; }
+        [JsonProperty("ml2")] public AnimatedValue AnimatedMiterLimit;
 
-        [JsonProperty("o")] [JsonRequired] public AnimatedValue Opacity { get; set; }
+        [JsonProperty("o")] [JsonRequired] public AnimatedValue Opacity;
 
-        [JsonProperty("w")] [JsonRequired] public AnimatedValue StrokeWidth { get; set; }
+        [JsonProperty("w")] [JsonRequired] public AnimatedValue StrokeWidth;
 
-        [JsonProperty("d")] public List<StrokeDash> Dashes { get; set; }
+        [JsonProperty("d")] public List<StrokeDash> Dashes;
     }
 
     class GroupShape : Shape
     {
-        [JsonProperty("np")] public double? NumProperties { get; set; }
+        [JsonProperty("np")] public double? NumProperties;
 
-        [JsonProperty("it")] public List<Shape> Shapes { get; set; }
+        [JsonProperty("it")] public List<Shape> Shapes;
 
-        [JsonProperty("cix")] public int? PropertyCIndex { get; set; }
+        [JsonProperty("cix")] public int? PropertyCIndex;
     }
 
     class PathShape : ShapeWithDirection
     {
-        [JsonProperty("ks")] [JsonRequired] public AnimatedBezier Shape { get; set; }
+        [JsonProperty("ks")] [JsonRequired] public AnimatedBezier Shape;
     }
 
     class PolystarShape : ShapeWithDirection
     {
-        [JsonProperty("p")] [JsonRequired] public AnimatedPosition Position { get; set; }
+        [JsonProperty("p")] [JsonRequired] public AnimatedPosition Position;
 
-        [JsonProperty("or")] [JsonRequired] public AnimatedValue OuterRadius { get; set; }
+        [JsonProperty("or")] [JsonRequired] public AnimatedValue OuterRadius;
 
-        [JsonProperty("os")] [JsonRequired] public AnimatedValue OuterRoundness { get; set; }
+        [JsonProperty("os")] [JsonRequired] public AnimatedValue OuterRoundness;
 
-        [JsonProperty("r")] [JsonRequired] public AnimatedValue Rotation { get; set; }
+        [JsonProperty("r")] [JsonRequired] public AnimatedValue Rotation;
 
-        [JsonProperty("pt")] [JsonRequired] public AnimatedValue Points { get; set; }
+        [JsonProperty("pt")] [JsonRequired] public AnimatedValue Points;
 
-        [JsonProperty("sy")] public StarType? StarType { get; set; }
+        [JsonProperty("sy")] public StarType? StarType;
 
         // TODO: required if StarType is Star:
 
-        [JsonProperty("ir")] public AnimatedValue InnerRadius { get; set; }
+        [JsonProperty("ir")] public AnimatedValue InnerRadius;
 
-        [JsonProperty("is")] public AnimatedValue InnerRoundness { get; set; }
+        [JsonProperty("is")] public AnimatedValue InnerRoundness;
     }
 
     enum StarType
@@ -188,16 +188,16 @@ namespace Lottie.Model
 
     class PuckerBloatShape : Shape
     {
-        [JsonProperty("a")] public AnimatedValue Amount { get; set; }
+        [JsonProperty("a")] public AnimatedValue Amount;
     }
 
     class RectangleShape : ShapeWithDirection
     {
-        [JsonProperty("p")] [JsonRequired] public AnimatedPosition Position { get; set; }
+        [JsonProperty("p")] [JsonRequired] public AnimatedPosition Position;
 
-        [JsonProperty("s")] [JsonRequired] public AnimatedVector Size { get; set; }
+        [JsonProperty("s")] [JsonRequired] public AnimatedVector Size;
 
-        [JsonProperty("r")] [JsonRequired] public AnimatedValue Radius { get; set; }
+        [JsonProperty("r")] [JsonRequired] public AnimatedValue Radius;
     }
 
     class ModifierShape : Shape
@@ -206,22 +206,22 @@ namespace Lottie.Model
 
     class RepeaterShape : ModifierShape
     {
-        [JsonProperty("c")] [JsonRequired] public AnimatedValue Copies { get; set; }
+        [JsonProperty("c")] [JsonRequired] public AnimatedValue Copies;
 
-        [JsonProperty("o")] public AnimatedValue Offset { get; set; }
+        [JsonProperty("o")] public AnimatedValue Offset;
 
-        [JsonProperty("m")] public Composite? Composite { get; set; }
+        [JsonProperty("m")] public Composite? Composite;
 
-        [JsonProperty("tr")] [JsonRequired] public List<RepeaterTransform> Transform { get; set; }
+        [JsonProperty("tr")] [JsonRequired] public List<RepeaterTransform> Transform;
     }
 
     class RepeaterTransform
     {
         // TODO: Transform properties
 
-        [JsonProperty("so")] public AnimatedValue StartOpacity { get; set; }
+        [JsonProperty("so")] public AnimatedValue StartOpacity;
 
-        [JsonProperty("eo")] public AnimatedValue EndOpacity { get; set; }
+        [JsonProperty("eo")] public AnimatedValue EndOpacity;
     }
 
     enum Composite
@@ -232,37 +232,37 @@ namespace Lottie.Model
 
     class RoundedCornersShape : ModifierShape
     {
-        [JsonProperty("r")] [JsonRequired] public AnimatedValue Radius { get; set; }
+        [JsonProperty("r")] [JsonRequired] public AnimatedValue Radius;
     }
 
     class StrokeShape : Shape
     {
-        [JsonProperty("lc")] public LineCap? LineCap { get; set; }
+        [JsonProperty("lc")] public LineCap? LineCap;
 
-        [JsonProperty("lj")] public LineJoin? LineJoin { get; set; }
+        [JsonProperty("lj")] public LineJoin? LineJoin;
 
-        [JsonProperty("ml")] public double? MiterLimit { get; set; }
+        [JsonProperty("ml")] public double? MiterLimit;
 
-        [JsonProperty("ml2")] public AnimatedValue AnimatedMiterLimit { get; set; }
+        [JsonProperty("ml2")] public AnimatedValue AnimatedMiterLimit;
 
-        [JsonProperty("o")] [JsonRequired] public AnimatedValue Opacity { get; set; }
+        [JsonProperty("o")] [JsonRequired] public AnimatedValue Opacity;
 
-        [JsonProperty("w")] [JsonRequired] public AnimatedValue StrokeWidth { get; set; }
+        [JsonProperty("w")] [JsonRequired] public AnimatedValue StrokeWidth;
 
-        [JsonProperty("d")] public List<StrokeDash> Dashes { get; set; }
+        [JsonProperty("d")] public List<StrokeDash> Dashes;
 
-        [JsonProperty("c")] [JsonRequired] public AnimatedColor Color { get; set; }
+        [JsonProperty("c")] [JsonRequired] public AnimatedColor Color;
     }
 
     class StrokeDash
     {
-        [JsonProperty("nm")] public string Name { get; set; }
+        [JsonProperty("nm")] public string Name;
 
-        [JsonProperty("mn")] public string MatchName { get; set; }
+        [JsonProperty("mn")] public string MatchName;
 
-        [JsonProperty("n")] public char Type { get; set; }
+        [JsonProperty("n")] public char Type;
 
-        [JsonProperty("v")] public AnimatedValue Length { get; set; }
+        [JsonProperty("v")] public AnimatedValue Length;
     }
 
     enum LineCap
@@ -276,18 +276,18 @@ namespace Lottie.Model
     {
         // Multiple inheritance is a pain here, so lets encapsulate the transform instead.
         // This will be manually deserialized by the converter.
-        public Transform Transform { get; set; }
+        public Transform Transform;
     }
 
     class TrimShape : ModifierShape
     {
-        [JsonProperty("s")] [JsonRequired] public AnimatedValue Start { get; set; }
+        [JsonProperty("s")] [JsonRequired] public AnimatedValue Start;
 
-        [JsonProperty("e")] [JsonRequired] public AnimatedValue End { get; set; }
+        [JsonProperty("e")] [JsonRequired] public AnimatedValue End;
 
-        [JsonProperty("o")] [JsonRequired] public AnimatedValue Offset { get; set; }
+        [JsonProperty("o")] [JsonRequired] public AnimatedValue Offset;
 
-        [JsonProperty("m")] public TrimMultipleShapes? Multiple { get; set; }
+        [JsonProperty("m")] public TrimMultipleShapes? Multiple;
     }
 
     enum TrimMultipleShapes
@@ -298,14 +298,14 @@ namespace Lottie.Model
 
     class TwistShape : Shape
     {
-        [JsonProperty("a")] public AnimatedValue Angle { get; set; }
+        [JsonProperty("a")] public AnimatedValue Angle;
 
-        [JsonProperty("c")] public AnimatedVector Size { get; set; }
+        [JsonProperty("c")] public AnimatedVector Size;
     }
 
     class MergeShape : Shape
     {
-        [JsonProperty("mm")] public MergeMode? Mode { get; set; }
+        [JsonProperty("mm")] public MergeMode? Mode;
     }
 
     enum MergeMode
@@ -319,11 +319,11 @@ namespace Lottie.Model
 
     class OffsetPathShape : Shape
     {
-        [JsonProperty("a")] public AnimatedValue Amount { get; set; }
+        [JsonProperty("a")] public AnimatedValue Amount;
 
-        [JsonProperty("lj")] public LineJoin? LineJoin { get; set; }
+        [JsonProperty("lj")] public LineJoin? LineJoin;
 
-        [JsonProperty("ml")] public AnimatedValue MiterLimit { get; set; }
+        [JsonProperty("ml")] public AnimatedValue MiterLimit;
     }
 
     enum LineJoin
@@ -335,11 +335,11 @@ namespace Lottie.Model
 
     class ZigZagShape : Shape
     {
-        [JsonProperty("r")] public AnimatedValue Frequency { get; set; }
+        [JsonProperty("r")] public AnimatedValue Frequency;
 
-        [JsonProperty("s")] public AnimatedValue Amplitude { get; set; }
+        [JsonProperty("s")] public AnimatedValue Amplitude;
 
-        [JsonProperty("pt")] public AnimatedValue PointType { get; set; }
+        [JsonProperty("pt")] public AnimatedValue PointType;
     }
 
     class NoStyleShape : Shape

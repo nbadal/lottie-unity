@@ -5,36 +5,36 @@ namespace Lottie.Model
 {
     public class Asset
     {
-        [JsonProperty("id")] [JsonRequired] public string Id { get; set; }
+        [JsonProperty("id")] [JsonRequired] public string Id;
 
-        [JsonProperty("nm")] public string Name { get; set; }
+        [JsonProperty("nm")] public string Name;
     }
 
     public class FileAsset : Asset
     {
-        [JsonProperty("u")] [JsonRequired] public string Path { get; set; }
+        [JsonProperty("u")] [JsonRequired] public string Path;
 
-        [JsonProperty("p")] public string FileName { get; set; }
+        [JsonProperty("p")] public string FileName;
 
-        [JsonProperty("e")] public bool? Embedded { get; set; } // TODO: IntBools
+        [JsonProperty("e")] public bool? Embedded; // TODO: IntBools
     }
 
     public class ImageAsset : FileAsset
     {
-        [JsonProperty("w")] public long? Width { get; set; }
+        [JsonProperty("w")] public long? Width;
 
-        [JsonProperty("h")] public long? Height { get; set; }
+        [JsonProperty("h")] public long? Height;
 
-        [JsonProperty("t")] public string Type { get; set; }
+        [JsonProperty("t")] public string Type;
     }
 
     public class PrecompositionAsset : Asset
     {
-        [JsonProperty("layers")][JsonRequired] public List<Layer> Layers { get; set; }
+        [JsonProperty("layers")][JsonRequired] public List<Layer> Layers;
     
-        [JsonProperty("fr")] public double? FrameRate { get; set; }
+        [JsonProperty("fr")] public double? FrameRate;
     
-        [JsonProperty("xt")] public bool? Extra { get; set; } // TODO: IntBools
+        [JsonProperty("xt")] public bool? Extra; // TODO: IntBools
     }
 
     public class SoundAsset : FileAsset
@@ -43,6 +43,6 @@ namespace Lottie.Model
 
     public class DataSourceAsset : FileAsset
     {
-        [JsonProperty("t")] public int Type { get; set; }
+        [JsonProperty("t")] public int Type;
     }
 }

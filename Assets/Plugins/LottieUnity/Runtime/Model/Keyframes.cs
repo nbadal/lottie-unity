@@ -7,13 +7,13 @@ namespace Lottie.Model
 {
     public class Bezier
     {
-        [JsonProperty("c")] public bool? Closed { get; set; }
+        [JsonProperty("c")] public bool? Closed;
         
-        [JsonProperty("i")] [JsonRequired] public List<double[]> InTangents { get; set; }
+        [JsonProperty("i")] [JsonRequired] public List<double[]> InTangents;
         
-        [JsonProperty("o")] [JsonRequired] public List<double[]> OutTangents { get; set; }
+        [JsonProperty("o")] [JsonRequired] public List<double[]> OutTangents;
         
-        [JsonProperty("v")] [JsonRequired] public List<double[]> Vertices { get; set; }
+        [JsonProperty("v")] [JsonRequired] public List<double[]> Vertices;
 
         public int SegmentCount => (Closed.HasValue && Closed.Value) ? Vertices.Count : Vertices.Count - 1;
         

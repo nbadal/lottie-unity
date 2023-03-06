@@ -7,10 +7,10 @@ namespace Lottie.Model
     [JsonConverter(typeof(ColorConverter))]
     public class Color
     {
-        public double R { get; set; }
-        public double G { get; set; }
-        public double B { get; set; }
-        public double? A { get; set; }
+        public double R;
+        public double G;
+        public double B;
+        public double? A;
     }
 
     class ColorConverter : JsonConverter<Color>

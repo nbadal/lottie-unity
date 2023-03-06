@@ -7,17 +7,17 @@ namespace Lottie.Model
     [JsonConverter(typeof(TransformConverter))]
     public class Transform
     {
-        [JsonProperty("a")] public AnimatedPosition AnchorPoint { get; set; }
+        [JsonProperty("a")] public AnimatedPosition AnchorPoint;
         
-        [JsonProperty("s")] public AnimatedVector Scale { get; set; }
+        [JsonProperty("s")] public AnimatedVector Scale;
         
-        [JsonProperty("o")] public AnimatedValue Opacity { get; set; }
+        [JsonProperty("o")] public AnimatedValue Opacity;
         
-        [JsonProperty("sk")] public AnimatedValue Skew { get; set; }
+        [JsonProperty("sk")] public AnimatedValue Skew;
         
-        [JsonProperty("sa")] public AnimatedValue SkewAxis { get; set; }
+        [JsonProperty("sa")] public AnimatedValue SkewAxis;
         
-        [JsonProperty("p")] public ITransformPosition Position { get; set; }
+        [JsonProperty("p")] public ITransformPosition Position;
 
         internal bool IsAnimated()
         {
@@ -37,18 +37,18 @@ namespace Lottie.Model
 
     public class AngleRotationTransform : Transform
     {
-        [JsonProperty("r")] public AnimatedValue Rotation { get; set; }
+        [JsonProperty("r")] public AnimatedValue Rotation;
     }
     
     public class SplitRotationTransform : Transform
     {
-        [JsonProperty("rx")] public AnimatedValue RotationX { get; set; }
+        [JsonProperty("rx")] public AnimatedValue RotationX;
         
-        [JsonProperty("ry")] public AnimatedValue RotationY { get; set; }
+        [JsonProperty("ry")] public AnimatedValue RotationY;
         
-        [JsonProperty("rz")] public AnimatedValue RotationZ { get; set; }
+        [JsonProperty("rz")] public AnimatedValue RotationZ;
         
-        [JsonProperty("or")] public AnimatedVector Orientation { get; set; }
+        [JsonProperty("or")] public AnimatedVector Orientation;
     }
     
     [JsonConverter(typeof(TransformPositionConverter))]

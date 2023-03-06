@@ -7,27 +7,27 @@ namespace Lottie.Model
     {
         [JsonProperty("ch")]
         [JsonRequired]
-        public string Character { get; set; }
+        public string Character;
         
         [JsonProperty("fFamily")]
         [JsonRequired]
-        public string FontFamily { get; set; }
+        public string FontFamily;
         
         [JsonProperty("size")]
         [JsonRequired]
-        public double FontSize { get; set; }
+        public double FontSize;
         
         [JsonProperty("style")]
         [JsonRequired]
-        public string FontStyle { get; set; }
+        public string FontStyle;
         
         [JsonProperty("w")]
         [JsonRequired]
-        public double Width { get; set; }
+        public double Width;
         
         [JsonProperty("data")]
         [JsonRequired]
-        public CharacterDataType Data { get; set; }
+        public CharacterDataType Data;
     }
     
     public class CharacterDataType
@@ -38,28 +38,28 @@ namespace Lottie.Model
     {
         [JsonProperty("shapes")]
         [JsonRequired]
-        public List<Shape> Shapes { get; set; }
+        public List<Shape> Shapes;
     }
 
     public class CharacterPrecomp : CharacterDataType
     {
         [JsonProperty("refId")]
         [JsonRequired]
-        public string RefId { get; set; }
+        public string RefId;
         
         [JsonProperty("ks")]
-        public Transform Transform { get; set; }
+        public Transform Transform;
         
         [JsonProperty("ip")]
-        public double? InPoint { get; set; }
+        public double? InPoint;
         
         [JsonProperty("op")]
-        public double? OutPoint { get; set; }
+        public double? OutPoint;
         
         [JsonProperty("sr")]
-        public double? TimeStretch { get; set; }
+        public double? TimeStretch;
         
         [JsonProperty("st")]
-        public double? StartTime { get; set; }
+        public double? StartTime;
     }
 }

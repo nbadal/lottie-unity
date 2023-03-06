@@ -7,17 +7,17 @@ namespace Lottie.Model
 {
     public class AnimatableProperty<TKeyframe, TStatic>
     {
-        [JsonProperty("ix")] public int? Index { get; set; }
+        [JsonProperty("ix")] public int? Index;
 
-        [JsonProperty("a")] public int? IsAnimated { get; set; } // TODO: IntBool
+        [JsonProperty("a")] public int? IsAnimated; // TODO: IntBool
 
-        [JsonProperty("x")] public string Expression { get; set; }
-
-        /*[JsonProperty("k")]*/
-        public List<TKeyframe> Values { get; set; }
+        [JsonProperty("x")] public string Expression;
 
         /*[JsonProperty("k")]*/
-        public TStatic Value { get; set; }
+        public List<TKeyframe> Values;
+
+        /*[JsonProperty("k")]*/
+        public TStatic Value;
     }
 
     public class AnimatablePropertyConverter<TKeyframe, TStatic> : JsonConverter<AnimatableProperty<TKeyframe, TStatic>>
@@ -103,7 +103,7 @@ namespace Lottie.Model
     [JsonConverter(typeof(AnimatablePropertyConverter<Keyframe, List<double>>))]
     public class AnimatedVector : AnimatableProperty<Keyframe, List<double>>
     {
-        [JsonProperty("l")] public int? Length { get; set; }
+        [JsonProperty("l")] public int? Length;
     }
 
     [JsonConverter(typeof(AnimatablePropertyConverter<PositionKeyframe, List<double>>))]
@@ -122,17 +122,17 @@ namespace Lottie.Model
     {
         public bool IsAnimated() => X.IsAnimated == 1 || Y.IsAnimated == 1 || Z.IsAnimated == 1;
         
-        [JsonProperty("x")] [JsonRequired] public AnimatedValue X { get; set; }
+        [JsonProperty("x")] [JsonRequired] public AnimatedValue X;
 
-        [JsonProperty("y")] [JsonRequired] public AnimatedValue Y { get; set; }
+        [JsonProperty("y")] [JsonRequired] public AnimatedValue Y;
 
-        [JsonProperty("z")] public AnimatedValue Z { get; set; }
+        [JsonProperty("z")] public AnimatedValue Z;
     }
 
     public class AnimatedGradient
     {
-        [JsonProperty("k")] [JsonRequired] public AnimatedVector Colors { get; set; }
+        [JsonProperty("k")] [JsonRequired] public AnimatedVector Colors;
 
-        [JsonProperty("p")] public int Count { get; set; }
+        [JsonProperty("p")] public int Count;
     }
 }

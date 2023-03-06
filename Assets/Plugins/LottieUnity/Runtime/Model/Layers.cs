@@ -36,81 +36,81 @@ namespace Lottie.Model
 
     public partial class Layer
     {
-        [JsonProperty("mn")] public string MatchName { get; set; }
+        [JsonProperty("mn")] public string MatchName;
 
-        [JsonProperty("nm")] public string Name { get; set; }
+        [JsonProperty("nm")] public string Name;
         
-        [JsonProperty("ty")] [JsonRequired] public LayerType Type { get; set; }
+        [JsonProperty("ty")] [JsonRequired] public LayerType Type;
 
-        [JsonProperty("ddd")] public int? ThreeDimensional { get; set; } // TODO: IntBools
+        [JsonProperty("ddd")] public int? ThreeDimensional; // TODO: IntBools
 
-        [JsonProperty("hd")] public bool? Hidden { get; set; }
+        [JsonProperty("hd")] public bool? Hidden;
 
-        [JsonProperty("ind")] public int? Index { get; set; }
+        [JsonProperty("ind")] public int? Index;
 
-        [JsonProperty("parent")] public int? Parent { get; set; }
+        [JsonProperty("parent")] public int? Parent;
 
-        [JsonProperty("sr")] public double? TimeStretch { get; set; }
+        [JsonProperty("sr")] public double? TimeStretch;
 
-        [JsonProperty("ip")] [JsonRequired] public double InPoint { get; set; }
+        [JsonProperty("ip")] [JsonRequired] public double InPoint;
 
-        [JsonProperty("op")] [JsonRequired] public double OutPoint { get; set; }
+        [JsonProperty("op")] [JsonRequired] public double OutPoint;
 
-        [JsonProperty("st")] [JsonRequired] public double StartTime { get; set; }
+        [JsonProperty("st")] [JsonRequired] public double StartTime;
     }
 
     public class VisualLayer : Layer
     {
-        [JsonProperty("cp")] public bool? CollapseTransform { get; set; }
+        [JsonProperty("cp")] public bool? CollapseTransform;
 
-        [JsonProperty("ks")] [JsonRequired] public Transform Transform { get; set; }
+        [JsonProperty("ks")] [JsonRequired] public Transform Transform;
 
-        [JsonProperty("ao")] public int? AutoOrient { get; set; } // TODO: IntBools
+        [JsonProperty("ao")] public int? AutoOrient; // TODO: IntBools
 
-        [JsonProperty("tt")] public MatteMode MatteMode { get; set; }
+        [JsonProperty("tt")] public MatteMode MatteMode;
 
-        [JsonProperty("td")] public int? MatteTarget { get; set; }
+        [JsonProperty("td")] public int? MatteTarget;
 
-        [JsonProperty("hasMask")] public bool? HasMask { get; set; }
+        [JsonProperty("hasMask")] public bool? HasMask;
 
-        [JsonProperty("masksProperties")] public List<Mask> Masks { get; set; }
+        [JsonProperty("masksProperties")] public List<Mask> Masks;
 
-        [JsonProperty("ef")] public List<Effect> Effects { get; set; }
+        [JsonProperty("ef")] public List<Effect> Effects;
 
-        [JsonProperty("mb")] public bool? MotionBlur { get; set; }
+        [JsonProperty("mb")] public bool? MotionBlur;
 
-        [JsonProperty("sy")] public List<Style> LayerStyle { get; set; }
+        [JsonProperty("sy")] public List<Style> LayerStyle;
 
-        [JsonProperty("bm")] public BlendMode BlendMode { get; set; }
+        [JsonProperty("bm")] public BlendMode BlendMode;
 
-        [JsonProperty("cl")] public string CssClass { get; set; }
+        [JsonProperty("cl")] public string CssClass;
 
-        [JsonProperty("ln")] public string LayerXmlId { get; set; }
+        [JsonProperty("ln")] public string LayerXmlId;
 
-        [JsonProperty("tg")] public string LayerXmlTagName { get; set; }
+        [JsonProperty("tg")] public string LayerXmlTagName;
     }
 
     public class PrecompositionLayer : VisualLayer
     {
-        [JsonProperty("refId")] [JsonRequired] public string RefId { get; set; }
+        [JsonProperty("refId")] [JsonRequired] public string RefId;
 
-        [JsonProperty("w")] [JsonRequired] public int Width { get; set; }
+        [JsonProperty("w")] [JsonRequired] public int Width;
 
-        [JsonProperty("h")] [JsonRequired] public int Height { get; set; }
+        [JsonProperty("h")] [JsonRequired] public int Height;
 
-        [JsonProperty("tm")] public AnimatedValue TimeRemapping { get; set; }
+        [JsonProperty("tm")] public AnimatedValue TimeRemapping;
     }
 
     public class SolidColorLayer : VisualLayer
     {
-        [JsonProperty("sc")] [JsonRequired] public string Color { get; set; }
-        [JsonProperty("sh")] [JsonRequired] public double Height { get; set; }
-        [JsonProperty("sw")] [JsonRequired] public double Width { get; set; }
+        [JsonProperty("sc")] [JsonRequired] public string Color;
+        [JsonProperty("sh")] [JsonRequired] public double Height;
+        [JsonProperty("sw")] [JsonRequired] public double Width;
     }
 
     public class ImageLayer : VisualLayer
     {
-        [JsonProperty("refId")] [JsonRequired] public string RefId { get; set; }
+        [JsonProperty("refId")] [JsonRequired] public string RefId;
     }
 
     public class NullLayer : VisualLayer
@@ -121,24 +121,24 @@ namespace Lottie.Model
     {
         [JsonProperty("shapes")]
         [JsonRequired]
-        public List<Shape> Shapes { get; set; }
+        public List<Shape> Shapes;
     }
 
     public class TextLayer : VisualLayer
     {
-        [JsonProperty("t")] [JsonRequired] public TextData Data { get; set; }
+        [JsonProperty("t")] [JsonRequired] public TextData Data;
     }
 
     public class AudioLayer : Layer
     {
-        [JsonProperty("refId")] public string RefId { get; set; }
+        [JsonProperty("refId")] public string RefId;
 
-        [JsonProperty("audio")] public AudioSettings AudioSettings { get; set; }
+        [JsonProperty("audio")] public AudioSettings AudioSettings;
     }
 
     public class AudioSettings
     {
-        [JsonProperty("lv")] [JsonRequired] public AnimatedVector Level { get; set; }
+        [JsonProperty("lv")] [JsonRequired] public AnimatedVector Level;
     }
 
     public class VideoPlaceholderLayer : Layer
@@ -167,9 +167,9 @@ namespace Lottie.Model
 
     public class CameraLayer : Layer
     {
-        [JsonProperty("ks")] [JsonRequired] public Transform Transform { get; set; }
+        [JsonProperty("ks")] [JsonRequired] public Transform Transform;
 
-        [JsonProperty("pe")] [JsonRequired] public AnimatedValue Perspective { get; set; }
+        [JsonProperty("pe")] [JsonRequired] public AnimatedValue Perspective;
     }
 
     public class LightLayer : Layer
@@ -178,23 +178,23 @@ namespace Lottie.Model
 
     public class DataLayer : Layer
     {
-        [JsonProperty("refId")] public string RefId { get; set; }
+        [JsonProperty("refId")] public string RefId;
     }
 
     public class Mask
     {
-        [JsonProperty("nm")] public string Name { get; set; }
+        [JsonProperty("nm")] public string Name;
 
-        [JsonProperty("mn")] public string MatchName { get; set; }
+        [JsonProperty("mn")] public string MatchName;
 
-        [JsonProperty("inv")] public bool? Inverted { get; set; }
+        [JsonProperty("inv")] public bool? Inverted;
 
-        [JsonProperty("pt")] public AnimatedBezier Shape { get; set; }
+        [JsonProperty("pt")] public AnimatedBezier Shape;
 
-        [JsonProperty("o")] public AnimatedValue Opacity { get; set; }
+        [JsonProperty("o")] public AnimatedValue Opacity;
 
-        [JsonProperty("mode")] public char Mode { get; set; }
+        [JsonProperty("mode")] public char Mode;
 
-        [JsonProperty("x")] public AnimatedValue Expand { get; set; }
+        [JsonProperty("x")] public AnimatedValue Expand;
     }
 }

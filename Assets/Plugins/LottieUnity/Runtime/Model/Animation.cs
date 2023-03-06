@@ -5,56 +5,55 @@ namespace Lottie.Model
 {
     public partial class LottieAnimation
     {
-        [JsonProperty("mn")] public string MatchName { get; set; }
+        [JsonProperty("mn")] public string MatchName;
 
-        [JsonProperty("nm")] public string Name { get; set; }
+        [JsonProperty("nm")] public string Name;
 
-        [JsonProperty("v")] public string Version { get; set; }
+        [JsonProperty("v")] public string Version;
 
-        [JsonProperty("fr")] [JsonRequired] public double FrameRate { get; set; }
+        [JsonProperty("fr")] [JsonRequired] public double FrameRate;
 
-        [JsonProperty("ip")] [JsonRequired] public double InPoint { get; set; }
+        [JsonProperty("ip")] [JsonRequired] public double InPoint;
 
-        [JsonProperty("op")] [JsonRequired] public double OutPoint { get; set; }
+        [JsonProperty("op")] [JsonRequired] public double OutPoint;
 
-        [JsonProperty("w")] [JsonRequired] public int Width { get; set; }
+        [JsonProperty("w")] [JsonRequired] public int Width;
 
-        [JsonProperty("h")] [JsonRequired] public int Height { get; set; }
+        [JsonProperty("h")] [JsonRequired] public int Height;
 
-        [JsonProperty("ddd")] public int? ThreeDimensional { get; set; }
+        [JsonProperty("ddd")] public int? ThreeDimensional;
 
-        [JsonProperty("assets")] public List<Asset> Assets { get; set; }
+        [JsonProperty("assets")] public List<Asset> Assets;
 
-        [JsonProperty("comps")] public List<PrecompositionAsset> Comps { get; set; }
+        [JsonProperty("comps")] public List<PrecompositionAsset> Comps;
 
-        [JsonProperty("fonts")] public FontList Fonts { get; set; }
+        [JsonProperty("fonts")] public FontList Fonts;
 
-        [JsonProperty("chars")] public List<CharacterData> Chars { get; set; }
+        [JsonProperty("chars")] public List<CharacterData> Chars;
 
-        [JsonProperty("meta")] public Metadata Meta { get; set; }
+        [JsonProperty("meta")] public Metadata Meta;
 
-        [JsonProperty("metadata")] public UserMetadata Metadata { get; set; }
+        [JsonProperty("metadata")] public UserMetadata Metadata;
 
-        [JsonProperty("mb")] public MotionBlur Mb { get; set; }
+        [JsonProperty("mb")] public MotionBlur Mb;
 
-        [JsonProperty("markers")] public List<Marker> Markers { get; set; }
+        [JsonProperty("markers")] public List<Marker> Markers;
 
-        [JsonProperty("layers")]
-        [JsonRequired]
-        public List<Layer> Layers { get; set; }
+        [JsonProperty("layers")] [JsonRequired]
+        public List<Layer> Layers;
     }
 
     public class Metadata
     {
-        [JsonProperty("a")] public string Author { get; set; }
+        [JsonProperty("a")] public string Author;
 
-        [JsonProperty("d")] public string Description { get; set; }
+        [JsonProperty("d")] public string Description;
 
-        [JsonProperty("tc")] public string ThemeColor { get; set; }
+        [JsonProperty("tc")] public string ThemeColor;
 
-        [JsonProperty("g")] public string Generator { get; set; }
+        [JsonProperty("g")] public string Generator;
 
-        [JsonProperty("k")] public Keywords Keywords { get; set; }
+        [JsonProperty("k")] public Keywords Keywords;
     }
 
     public class Keywords : List<string>
@@ -64,29 +63,29 @@ namespace Lottie.Model
 
     public class UserMetadata
     {
-        [JsonProperty("filename")] public string Filename { get; set; }
+        [JsonProperty("filename")] public string Filename;
 
-        [JsonProperty("customProps")] public object CustomProps { get; set; }
+        [JsonProperty("customProps")] public object CustomProps;
     }
 
     public class MotionBlur
     {
-        [JsonProperty("sa")] public double? ShutterAngle { get; set; }
+        [JsonProperty("sa")] public double? ShutterAngle;
 
-        [JsonProperty("sp")] public double? ShutterPhase { get; set; }
+        [JsonProperty("sp")] public double? ShutterPhase;
 
-        [JsonProperty("spf")] public double? SamplesPerFrame { get; set; }
+        [JsonProperty("spf")] public double? SamplesPerFrame;
 
-        [JsonProperty("asl")] public double? AdaptiveSampleLimit { get; set; }
+        [JsonProperty("asl")] public double? AdaptiveSampleLimit;
     }
 
     public class Marker
     {
-        [JsonProperty("cm")] public string Comment { get; set; }
+        [JsonProperty("cm")] public string Comment;
 
-        [JsonProperty("tm")] public double? Time { get; set; }
+        [JsonProperty("tm")] public double? Time;
 
-        [JsonProperty("dr")] public double? Duration { get; set; }
+        [JsonProperty("dr")] public double? Duration;
     }
 
 
