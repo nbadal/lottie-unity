@@ -4,7 +4,7 @@
 | Ellipse                          |   ✅   |
 | Rectangle                        |   ✅   |
 | Rounded Rectangle                |   ✅   |
-| Polystar                         |  🔄   | 
+| Polystar                         |   ✅   | 
 | Group                            |  🔄   |
 | Repeater                         |   ❓   |
 | Trim Path (individually)         |   ❓   |

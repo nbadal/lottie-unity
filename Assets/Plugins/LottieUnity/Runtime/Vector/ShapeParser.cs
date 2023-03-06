@@ -142,7 +142,7 @@ namespace Lottie.Vector
                         break;
                     case PolystarShape sr:
                         if (sr.Position.IsAnimated() || sr.Points.IsAnimated == 1 || sr.Rotation.IsAnimated == 1 ||
-                            sr.InnerRadius?.IsAnimated == 1 || sr.OuterRadius?.IsAnimated == 1 || 
+                            sr.InnerRadius?.IsAnimated == 1 || sr.OuterRadius?.IsAnimated == 1 ||
                             sr.InnerRoundness?.IsAnimated == 1 || sr.OuterRoundness?.IsAnimated == 1)
                         {
                             throw new NotImplementedException();
@@ -241,52 +241,83 @@ namespace Lottie.Vector
                 }
             };
         }
-        
+
         private static void CreatePolystarShape(PolystarShape sr, in Unity.VectorGraphics.Shape polystarShape)
         {
             var points = (float?)sr.Points.Value ?? 0f;
             if (points <= 1) return;
-            
-            var type  = sr.StarType ?? StarType.Polygon;
+
+            var type = sr.StarType ?? StarType.Polygon;
             var position = new Vector2((float)sr.Position.Value[0], (float)sr.Position.Value[1]);
             var rotation = (float?)sr.Rotation.Value ?? 0f;
             rotation *= Mathf.Deg2Rad;
             var innerRadius = (float?)sr.InnerRadius?.Value ?? 0f;
             var outerRadius = (float?)sr.OuterRadius?.Value ?? 0f;
+            var innerRoundness = (float?)sr.InnerRoundness?.Value ?? 0f;
+            innerRoundness /= 100f;
+            var outerRoundness = (float?)sr.OuterRoundness?.Value ?? 0f;
+            outerRoundness /= 100f;
 
             var pointLocations = new List<Vector2>();
-            
+            var pointInVector = new List<Vector2>();
+            var pointOutVector = new List<Vector2>();
+
             // Add the outer points
             for (var i = 0; i < points; i++)
             {
                 var radius = outerRadius;
-                var angle = rotation + i * 2 * Mathf.PI / points;
-                var point = position + new Vector2(Mathf.Sin(angle), -Mathf.Cos(angle)) * radius;
+                var angle = rotation + i * 2 * Mathf.PI / points - Mathf.PI / 2;
+                var point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
                 pointLocations.Add(point);
+                
+                var perimSegment = 2 * Mathf.PI * radius / (points * 4);
+                var oVec = new Vector2(point.y, -point.x) / Mathf.Sqrt(point.x * point.x + point.y * point.y);
+                var tangent = oVec * perimSegment * outerRoundness;
+                pointInVector.Add(point + tangent);
+                pointOutVector.Add(point - tangent);
             }
-            
+
             if (type == StarType.Star)
             {
                 // Add the inner points
                 for (var i = 0; i < points; i++)
                 {
                     var radius = innerRadius;
-                    var angle = rotation + i * 2 * Mathf.PI / points + Mathf.PI / points;
-                    var point = position + new Vector2(Mathf.Sin(angle), -Mathf.Cos(angle)) * radius;
+                    var angle = rotation + i * 2 * Mathf.PI / points + Mathf.PI / points - Mathf.PI / 2;
+                    var point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
                     pointLocations.Insert(i * 2 + 1, point);
+                
+                    var perimSegment = 2 * Mathf.PI * radius / (points * 4);
+                    var oVec = new Vector2(point.y, -point.x) / Mathf.Sqrt(point.x * point.x + point.y * point.y);
+                    var tangent = oVec * perimSegment * innerRoundness;
+                    pointInVector.Insert(i * 2 + 1, point + tangent);
+                    pointOutVector.Insert(i * 2 + 1, point - tangent);
                 }
             }
-            
+
             var lines = new List<BezierSegment>();
             for (var i = 0; i < pointLocations.Count; i++)
             {
-                var p0 = pointLocations[i];
-                var p1 = pointLocations[(i + 1) % pointLocations.Count];
-                lines.Add(VectorUtils.MakeLine(p0, p1));
+                var nextIdx = (i + 1) % pointLocations.Count;
+                var pA = pointLocations[i];
+                var pB = pointLocations[nextIdx];
+                
+                var pBIn = pointInVector[nextIdx];
+                var pAOut = pointOutVector[i];
+                
+                var line = new BezierSegment
+                {
+                    P0 = pA + position,
+                    P1 = pAOut + position,
+                    P2 = pBIn + position,
+                    P3 = pB + position
+                };
+                
+                lines.Add(line);
             }
 
             var path = VectorUtils.BezierSegmentsToPath(lines.ToArray());
-            
+
             polystarShape.Contours = new[]
             {
                 new BezierContour
