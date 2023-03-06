@@ -2,8 +2,8 @@
 |----------------------------------|:-----:|
 | Shape                            |  🔄   |
 | Ellipse                          |   ✅   |
-| Rectangle                        |  🔄   |
-| Rounded Rectangle                |  🔄   |
+| Rectangle                        |   ✅   |
+| Rounded Rectangle                |   ✅   |
 | Polystar                         |   ❓   | 
 | Group                            |  🔄   |
 | Repeater                         |   ❓   |
