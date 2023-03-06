@@ -114,28 +114,7 @@ namespace Lottie.Vector
 
                         var rectShape = new Unity.VectorGraphics.Shape();
 
-                        // For whatever reason, rectangles are centered on their position
-                        if (rc.Size == null) break;
-                        var size = new Vector2((float)rc.Size.Value[0], (float)rc.Size.Value[1]);
-                        var position = new Vector2((float)rc.Position.Value[0], (float)rc.Position.Value[1]);
-                        position -= size / 2f;
-
-                        if (rc.Radius != null)
-                        {
-                            if (rc.Radius.IsAnimated == 1)
-                            {
-                                throw new NotImplementedException();
-                            }
-
-                            var radius = (float?)rc.Radius.Value ?? 0f;
-                            var radiusVector = new Vector2(radius, radius);
-                            VectorUtils.MakeRectangleShape(rectShape, new Rect(position, size), radiusVector,
-                                radiusVector, radiusVector, radiusVector);
-                        }
-                        else
-                        {
-                            VectorUtils.MakeRectangleShape(rectShape, new Rect(position, size));
-                        }
+                        if (CreateRectangleShape(rc, rectShape)) break;
 
                         if (fill != null) rectShape.Fill = fill;
                         if (pathProps != null) rectShape.PathProps = pathProps.Value;
@@ -152,40 +131,7 @@ namespace Lottie.Vector
                         }
 
                         var pathShape = new Unity.VectorGraphics.Shape();
-                        var shapeData = sh.Shape.Value;
-                        var bezierSegments = new BezierSegment[shapeData.SegmentCount];
-                        for (var segment = 0; segment < shapeData.SegmentCount; segment++)
-                        {
-                            var bezierData = shapeData.Segment(segment);
-                            var bezier = new BezierSegment
-                            {
-                                P0 = new Vector2((float)bezierData.Item1[0], (float)bezierData.Item1[1]),
-                                P1 = new Vector2((float)bezierData.Item2[0], (float)bezierData.Item2[1]),
-                                P2 = new Vector2((float)bezierData.Item3[0], (float)bezierData.Item3[1]),
-                                P3 = new Vector2((float)bezierData.Item4[0], (float)bezierData.Item4[1]),
-                            };
-                            bezierSegments[segment] = bezier;
-                        }
-
-                        var path = VectorUtils.BezierSegmentsToPath(bezierSegments);
-                        if (!(shapeData.Closed ?? false))
-                        {
-                            // TODO: This feels hacky - probably a cleaner way to do this in the SVG parser
-                            // Set all elements of the last segment to p0
-                            var lastSegment = path[path.Length - 1];
-                            lastSegment.P1 = lastSegment.P0;
-                            lastSegment.P2 = lastSegment.P0;
-                            path[path.Length - 1] = lastSegment;
-                        }
-
-                        pathShape.Contours = new[]
-                        {
-                            new BezierContour
-                            {
-                                Segments = path,
-                                Closed = shapeData.Closed ?? false
-                            }
-                        };
+                        CreatePathShape(sh, pathShape);
                         if (fill != null) pathShape.Fill = fill;
                         if (pathProps != null) pathShape.PathProps = pathProps.Value;
 
@@ -195,6 +141,23 @@ namespace Lottie.Vector
                         });
                         break;
                     case PolystarShape sr:
+                        if (sr.Position.IsAnimated() || sr.Points.IsAnimated == 1 || sr.Rotation.IsAnimated == 1 ||
+                            sr.InnerRadius?.IsAnimated == 1 || sr.OuterRadius?.IsAnimated == 1 || 
+                            sr.InnerRoundness?.IsAnimated == 1 || sr.OuterRoundness?.IsAnimated == 1)
+                        {
+                            throw new NotImplementedException();
+                        }
+
+                        var polystarShape = new Unity.VectorGraphics.Shape();
+                        CreatePolystarShape(sr, polystarShape);
+                        if (fill != null) polystarShape.Fill = fill;
+                        if (pathProps != null) polystarShape.PathProps = pathProps.Value;
+
+                        groupNode.Children.Add(new SceneNode
+                        {
+                            Shapes = new List<Unity.VectorGraphics.Shape> { polystarShape },
+                        });
+                        break;
                     case GradientFillShape gf:
                     case GradientStrokeShape gs:
                     case NoStyleShape no:
@@ -211,6 +174,127 @@ namespace Lottie.Vector
             }
 
             groupNode.Transform = transform;
+        }
+
+        private static bool CreateRectangleShape(RectangleShape rc, in Unity.VectorGraphics.Shape rectShape)
+        {
+            // For whatever reason, rectangles are centered on their position
+            if (rc.Size == null) return true;
+            var size = new Vector2((float)rc.Size.Value[0], (float)rc.Size.Value[1]);
+            var position = new Vector2((float)rc.Position.Value[0], (float)rc.Position.Value[1]);
+            position -= size / 2f;
+
+            if (rc.Radius != null)
+            {
+                if (rc.Radius.IsAnimated == 1)
+                {
+                    throw new NotImplementedException();
+                }
+
+                var radius = (float?)rc.Radius.Value ?? 0f;
+                var radiusVector = new Vector2(radius, radius);
+                VectorUtils.MakeRectangleShape(rectShape, new Rect(position, size), radiusVector,
+                    radiusVector, radiusVector, radiusVector);
+            }
+            else
+            {
+                VectorUtils.MakeRectangleShape(rectShape, new Rect(position, size));
+            }
+
+            return false;
+        }
+
+        private static void CreatePathShape(PathShape sh, in Unity.VectorGraphics.Shape pathShape)
+        {
+            var shapeData = sh.Shape.Value;
+            var bezierSegments = new BezierSegment[shapeData.SegmentCount];
+            for (var segment = 0; segment < shapeData.SegmentCount; segment++)
+            {
+                var bezierData = shapeData.Segment(segment);
+                var bezier = new BezierSegment
+                {
+                    P0 = new Vector2((float)bezierData.Item1[0], (float)bezierData.Item1[1]),
+                    P1 = new Vector2((float)bezierData.Item2[0], (float)bezierData.Item2[1]),
+                    P2 = new Vector2((float)bezierData.Item3[0], (float)bezierData.Item3[1]),
+                    P3 = new Vector2((float)bezierData.Item4[0], (float)bezierData.Item4[1]),
+                };
+                bezierSegments[segment] = bezier;
+            }
+
+            var path = VectorUtils.BezierSegmentsToPath(bezierSegments);
+            if (!(shapeData.Closed ?? false))
+            {
+                // TODO: This feels hacky - probably a cleaner way to do this in the SVG parser
+                // Set all elements of the last segment to p0
+                var lastSegment = path[path.Length - 1];
+                lastSegment.P1 = lastSegment.P0;
+                lastSegment.P2 = lastSegment.P0;
+                path[path.Length - 1] = lastSegment;
+            }
+
+            pathShape.Contours = new[]
+            {
+                new BezierContour
+                {
+                    Segments = path,
+                    Closed = shapeData.Closed ?? false
+                }
+            };
+        }
+        
+        private static void CreatePolystarShape(PolystarShape sr, in Unity.VectorGraphics.Shape polystarShape)
+        {
+            var points = (float?)sr.Points.Value ?? 0f;
+            if (points <= 1) return;
+            
+            var type  = sr.StarType ?? StarType.Polygon;
+            var position = new Vector2((float)sr.Position.Value[0], (float)sr.Position.Value[1]);
+            var rotation = (float?)sr.Rotation.Value ?? 0f;
+            rotation *= Mathf.Deg2Rad;
+            var innerRadius = (float?)sr.InnerRadius?.Value ?? 0f;
+            var outerRadius = (float?)sr.OuterRadius?.Value ?? 0f;
+
+            var pointLocations = new List<Vector2>();
+            
+            // Add the outer points
+            for (var i = 0; i < points; i++)
+            {
+                var radius = outerRadius;
+                var angle = rotation + i * 2 * Mathf.PI / points;
+                var point = position + new Vector2(Mathf.Sin(angle), -Mathf.Cos(angle)) * radius;
+                pointLocations.Add(point);
+            }
+            
+            if (type == StarType.Star)
+            {
+                // Add the inner points
+                for (var i = 0; i < points; i++)
+                {
+                    var radius = innerRadius;
+                    var angle = rotation + i * 2 * Mathf.PI / points + Mathf.PI / points;
+                    var point = position + new Vector2(Mathf.Sin(angle), -Mathf.Cos(angle)) * radius;
+                    pointLocations.Insert(i * 2 + 1, point);
+                }
+            }
+            
+            var lines = new List<BezierSegment>();
+            for (var i = 0; i < pointLocations.Count; i++)
+            {
+                var p0 = pointLocations[i];
+                var p1 = pointLocations[(i + 1) % pointLocations.Count];
+                lines.Add(VectorUtils.MakeLine(p0, p1));
+            }
+
+            var path = VectorUtils.BezierSegmentsToPath(lines.ToArray());
+            
+            polystarShape.Contours = new[]
+            {
+                new BezierContour
+                {
+                    Segments = path,
+                    Closed = true
+                }
+            };
         }
 
         private static float[] MakeDashPattern(List<StrokeDash> stDashes, out float patternOffset)
