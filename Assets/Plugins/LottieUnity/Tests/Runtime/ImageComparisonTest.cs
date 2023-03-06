@@ -37,7 +37,7 @@ public class ImageComparisonTest
 
     public static string[] GetComparisonNames()
     {
-        var comparisonsPath = Application.dataPath + "/Resources/compare/";
+        var comparisonsPath = Application.dataPath + "/Plugins/LottieUnity/Tests/Resources/compare/";
         return Directory.GetFiles(comparisonsPath, "*.svg.txt", SearchOption.AllDirectories)
             .Select(absPath => absPath.Substring(comparisonsPath.Length, absPath.Length - comparisonsPath.Length))
             .Select(relPath => relPath.Substring(0, relPath.IndexOf('.', relPath.LastIndexOf('/'))))
