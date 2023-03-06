@@ -88,14 +88,15 @@ namespace Lottie.Vector
                         };
                         break;
                     case EllipseShape el:
-                        if (el.Size.IsAnimated == 1)
+                        if (el.Size.IsAnimated == 1 || el.Position.IsAnimated())
                         {
                             throw new NotImplementedException();
                         }
 
                         var ellipseShape = new Unity.VectorGraphics.Shape();
-                        VectorUtils.MakeEllipseShape(ellipseShape, Vector2.zero, (float)el.Size.Value[0] / 2f,
-                            (float)el.Size.Value[1] / 2f);
+                        var ellipsePos = new Vector2((float)el.Position.Value[0], (float)el.Position.Value[1]);
+                        VectorUtils.MakeEllipseShape(ellipseShape, ellipsePos,
+                            (float)el.Size.Value[0] / 2f, (float)el.Size.Value[1] / 2f);
 
                         if (fill != null) ellipseShape.Fill = fill;
                         if (pathProps != null) ellipseShape.PathProps = pathProps.Value;
@@ -176,6 +177,7 @@ namespace Lottie.Vector
                             lastSegment.P2 = lastSegment.P0;
                             path[path.Length - 1] = lastSegment;
                         }
+
                         pathShape.Contours = new[]
                         {
                             new BezierContour

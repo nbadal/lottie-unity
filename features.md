@@ -1,7 +1,7 @@
 | Shapes                           | Unity |
 |----------------------------------|:-----:|
 | Shape                            |  🔄   |
-| Ellipse                          |  🔄   |
+| Ellipse                          |   ✅   |
 | Rectangle                        |  🔄   |
 | Rounded Rectangle                |  🔄   |
 | Polystar                         |   ❓   | 

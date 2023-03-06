@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256">
   <g>
-    <circle cx="128" cy="128" r="128" fill="red"></circle>
+    <ellipse cx="128" cy="64" rx="128" ry="64" fill="blue"/>
+    <ellipse cx="64" cy="128" rx="64" ry="128" fill="red"/>
   </g>
 </svg>
