@@ -12,13 +12,16 @@ public class ImageComparisonTest
     public void OneTimeSetUp()
     {
         // Wipe "ActualImages" folder
-        var actualImagesPath = Application.dataPath + "/ActualImages";
-        if (Directory.Exists(actualImagesPath)) Directory.Delete(actualImagesPath, true);
+        var imagesPath = Application.dataPath + "/ActualImages";
+        if (Directory.Exists(imagesPath)) Directory.Delete(imagesPath, true);
+        var imagesMeta = imagesPath + ".meta";
+        if (File.Exists(imagesMeta)) File.Delete(imagesMeta);
     }
 
     [Test, TestCaseSource(nameof(GetComparisonNames))]
     public void CompareSvg(string name)
     {
+        name = name.Replace("--", "/");
         var svg = SVGParser.ImportSVG(new StringReader(Resources.Load<TextAsset>($"compare/{name}.svg").text));
         var lottie = LottieParser.Parse(Resources.Load<TextAsset>($"compare/{name}").text);
 
@@ -38,6 +41,7 @@ public class ImageComparisonTest
         return Directory.GetFiles(comparisonsPath, "*.svg.txt", SearchOption.AllDirectories)
             .Select(absPath => absPath.Substring(comparisonsPath.Length, absPath.Length - comparisonsPath.Length))
             .Select(relPath => relPath.Substring(0, relPath.IndexOf('.', relPath.LastIndexOf('/'))))
+            .Select(name => name.Replace("/", "--"))
             .ToArray();
     }
 
