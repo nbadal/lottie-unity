@@ -17,9 +17,9 @@ namespace Lottie.Vector
 
         private static void ParseGroupShapes(this LottieParser parser, List<Shape> grShapes, SceneNode groupNode)
         {
-            IFill fill = null;
-            PathProperties? pathProps = null;
             Matrix2D transform = Matrix2D.identity;
+            
+            var shapeStyles = new List<ShapeStyle>();
 
             // Iterate through shapes in reverse order
             for (var i = grShapes.Count - 1; i >= 0; i--)
@@ -40,10 +40,11 @@ namespace Lottie.Vector
                         transform = t.Transform.ToMatrix2D(parser._animators);
                         break;
                     case FillShape fl:
-                        fill = new SolidFill
+                        var fill = new SolidFill
                         {
                             Color = FromLottieColor(fl.Color)
                         };
+                        shapeStyles.Add(new FillStyle(fill));
                         break;
                     case StrokeShape st:
                         if (st.StrokeWidth.IsAnimated == 1)
@@ -55,7 +56,7 @@ namespace Lottie.Vector
                         var patternOffset = 0f;
                         var pattern = st.Dashes == null ? null : MakeDashPattern(st.Dashes, out patternOffset);
 
-                        pathProps = new PathProperties
+                        var pathProps = new PathProperties
                         {
                             Stroke = new Stroke
                             {
@@ -66,6 +67,7 @@ namespace Lottie.Vector
                             },
                             Corners = st.LineJoin switch
                             {
+                                null => PathCorner.Round,
                                 LineJoin.Miter => PathCorner.Tipped,
                                 LineJoin.Round => PathCorner.Round,
                                 LineJoin.Bevel => PathCorner.Beveled,
@@ -73,6 +75,7 @@ namespace Lottie.Vector
                             },
                             Head = st.LineCap switch
                             {
+                                null => PathEnding.Round,
                                 LineCap.Butt => PathEnding.Chop,
                                 LineCap.Round => PathEnding.Round,
                                 LineCap.Square => PathEnding.Square,
@@ -80,12 +83,15 @@ namespace Lottie.Vector
                             },
                             Tail = st.LineCap switch
                             {
+                                null => PathEnding.Round,
                                 LineCap.Butt => PathEnding.Chop,
                                 LineCap.Round => PathEnding.Round,
                                 LineCap.Square => PathEnding.Square,
                                 _ => throw new ArgumentOutOfRangeException()
                             },
                         };
+                        
+                        shapeStyles.Add(new PathStyle(pathProps));
                         break;
                     case EllipseShape el:
                         if (el.Size.IsAnimated == 1 || el.Position.IsAnimated())
@@ -98,13 +104,7 @@ namespace Lottie.Vector
                         VectorUtils.MakeEllipseShape(ellipseShape, ellipsePos,
                             (float)el.Size.Value[0] / 2f, (float)el.Size.Value[1] / 2f);
 
-                        if (fill != null) ellipseShape.Fill = fill;
-                        if (pathProps != null) ellipseShape.PathProps = pathProps.Value;
-
-                        groupNode.Children.Add(new SceneNode
-                        {
-                            Shapes = new List<Unity.VectorGraphics.Shape> { ellipseShape },
-                        });
+                        AddShapeWithStyles(groupNode, shapeStyles, ellipseShape);
                         break;
                     case RectangleShape rc:
                         if (rc.Size.IsAnimated == 1)
@@ -116,13 +116,7 @@ namespace Lottie.Vector
 
                         if (CreateRectangleShape(rc, rectShape)) break;
 
-                        if (fill != null) rectShape.Fill = fill;
-                        if (pathProps != null) rectShape.PathProps = pathProps.Value;
-
-                        groupNode.Children.Add(new SceneNode
-                        {
-                            Shapes = new List<Unity.VectorGraphics.Shape> { rectShape },
-                        });
+                        AddShapeWithStyles(groupNode, shapeStyles, rectShape);
                         break;
                     case PathShape sh:
                         if (sh.Shape.IsAnimated == 1)
@@ -132,13 +126,7 @@ namespace Lottie.Vector
 
                         var pathShape = new Unity.VectorGraphics.Shape();
                         CreatePathShape(sh, pathShape);
-                        if (fill != null) pathShape.Fill = fill;
-                        if (pathProps != null) pathShape.PathProps = pathProps.Value;
-
-                        groupNode.Children.Add(new SceneNode
-                        {
-                            Shapes = new List<Unity.VectorGraphics.Shape> { pathShape },
-                        });
+                        AddShapeWithStyles(groupNode, shapeStyles, pathShape);
                         break;
                     case PolystarShape sr:
                         if (sr.Position.IsAnimated() || sr.Points.IsAnimated == 1 || sr.Rotation.IsAnimated == 1 ||
@@ -150,13 +138,7 @@ namespace Lottie.Vector
 
                         var polystarShape = new Unity.VectorGraphics.Shape();
                         CreatePolystarShape(sr, polystarShape);
-                        if (fill != null) polystarShape.Fill = fill;
-                        if (pathProps != null) polystarShape.PathProps = pathProps.Value;
-
-                        groupNode.Children.Add(new SceneNode
-                        {
-                            Shapes = new List<Unity.VectorGraphics.Shape> { polystarShape },
-                        });
+                        AddShapeWithStyles(groupNode, shapeStyles, polystarShape);
                         break;
                     case GradientFillShape gf:
                     case GradientStrokeShape gs:
@@ -174,6 +156,25 @@ namespace Lottie.Vector
             }
 
             groupNode.Transform = transform;
+        }
+
+        private static void AddShapeWithStyles(SceneNode parent, List<ShapeStyle> styles, Unity.VectorGraphics.Shape shape)
+        {
+            foreach (var shapeStyle in styles)
+            {
+                var shapeCopy = new Unity.VectorGraphics.Shape
+                {
+                    Contours = shape.Contours,
+                    IsConvex = shape.IsConvex,
+                };
+
+                shapeStyle.ApplyToShape(ref shapeCopy);
+
+                parent.Children.Add(new SceneNode
+                {
+                    Shapes = new List<Unity.VectorGraphics.Shape> { shapeCopy },
+                });
+            }
         }
 
         private static bool CreateRectangleShape(RectangleShape rc, in Unity.VectorGraphics.Shape rectShape)
