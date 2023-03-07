@@ -18,7 +18,7 @@ namespace Lottie.Vector
         private static void ParseGroupShapes(this LottieParser parser, List<Shape> grShapes, SceneNode groupNode)
         {
             Matrix2D transform = Matrix2D.identity;
-            
+
             var shapeStyles = new List<ShapeStyle>();
 
             // Iterate through shapes in reverse order
@@ -42,7 +42,14 @@ namespace Lottie.Vector
                     case FillShape fl:
                         var fill = new SolidFill
                         {
-                            Color = FromLottieColor(fl.Color)
+                            Color = FromLottieColor(fl.Color),
+                            Mode = fl.FillRule switch
+                            {
+                                FillRule.NonZero => FillMode.NonZero,
+                                FillRule.EvenOdd => FillMode.OddEven,
+                                null => FillMode.NonZero,
+                                _ => throw new ArgumentOutOfRangeException()
+                            },
                         };
                         shapeStyles.Add(new FillStyle(fill));
                         break;
@@ -90,7 +97,7 @@ namespace Lottie.Vector
                                 _ => throw new ArgumentOutOfRangeException()
                             },
                         };
-                        
+
                         shapeStyles.Add(new PathStyle(pathProps));
                         break;
                     case EllipseShape el:
@@ -103,8 +110,7 @@ namespace Lottie.Vector
                         var ellipsePos = new Vector2((float)el.Position.Value[0], (float)el.Position.Value[1]);
                         VectorUtils.MakeEllipseShape(ellipseShape, ellipsePos,
                             (float)el.Size.Value[0] / 2f, (float)el.Size.Value[1] / 2f);
-
-                        AddShapeWithStyles(groupNode, shapeStyles, ellipseShape);
+                        shapeStyles.ForEach(s => s.AddShape(ellipseShape));
                         break;
                     case RectangleShape rc:
                         if (rc.Size.IsAnimated == 1)
@@ -115,8 +121,7 @@ namespace Lottie.Vector
                         var rectShape = new Unity.VectorGraphics.Shape();
 
                         if (CreateRectangleShape(rc, rectShape)) break;
-
-                        AddShapeWithStyles(groupNode, shapeStyles, rectShape);
+                        shapeStyles.ForEach(s => s.AddShape(rectShape));
                         break;
                     case PathShape sh:
                         if (sh.Shape.IsAnimated == 1)
@@ -126,7 +131,7 @@ namespace Lottie.Vector
 
                         var pathShape = new Unity.VectorGraphics.Shape();
                         CreatePathShape(sh, pathShape);
-                        AddShapeWithStyles(groupNode, shapeStyles, pathShape);
+                        shapeStyles.ForEach(s => s.AddShape(pathShape));
                         break;
                     case PolystarShape sr:
                         if (sr.Position.IsAnimated() || sr.Points.IsAnimated == 1 || sr.Rotation.IsAnimated == 1 ||
@@ -138,7 +143,7 @@ namespace Lottie.Vector
 
                         var polystarShape = new Unity.VectorGraphics.Shape();
                         CreatePolystarShape(sr, polystarShape);
-                        AddShapeWithStyles(groupNode, shapeStyles, polystarShape);
+                        shapeStyles.ForEach(s => s.AddShape(polystarShape));
                         break;
                     case GradientFillShape gf:
                     case GradientStrokeShape gs:
@@ -155,26 +160,9 @@ namespace Lottie.Vector
                 }
             }
 
+            shapeStyles.ForEach(s => s.AddToNode(groupNode));
+
             groupNode.Transform = transform;
-        }
-
-        private static void AddShapeWithStyles(SceneNode parent, List<ShapeStyle> styles, Unity.VectorGraphics.Shape shape)
-        {
-            foreach (var shapeStyle in styles)
-            {
-                var shapeCopy = new Unity.VectorGraphics.Shape
-                {
-                    Contours = shape.Contours,
-                    IsConvex = shape.IsConvex,
-                };
-
-                shapeStyle.ApplyToShape(ref shapeCopy);
-
-                parent.Children.Add(new SceneNode
-                {
-                    Shapes = new List<Unity.VectorGraphics.Shape> { shapeCopy },
-                });
-            }
         }
 
         private static bool CreateRectangleShape(RectangleShape rc, in Unity.VectorGraphics.Shape rectShape)
@@ -270,7 +258,7 @@ namespace Lottie.Vector
                 var angle = rotation + i * 2 * Mathf.PI / points - Mathf.PI / 2;
                 var point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
                 pointLocations.Add(point);
-                
+
                 var perimSegment = 2 * Mathf.PI * radius / (points * 4);
                 var oVec = new Vector2(point.y, -point.x) / Mathf.Sqrt(point.x * point.x + point.y * point.y);
                 var tangent = oVec * perimSegment * outerRoundness;
@@ -287,7 +275,7 @@ namespace Lottie.Vector
                     var angle = rotation + i * 2 * Mathf.PI / points + Mathf.PI / points - Mathf.PI / 2;
                     var point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
                     pointLocations.Insert(i * 2 + 1, point);
-                
+
                     var perimSegment = 2 * Mathf.PI * radius / (points * 4);
                     var oVec = new Vector2(point.y, -point.x) / Mathf.Sqrt(point.x * point.x + point.y * point.y);
                     var tangent = oVec * perimSegment * innerRoundness;
@@ -302,10 +290,10 @@ namespace Lottie.Vector
                 var nextIdx = (i + 1) % pointLocations.Count;
                 var pA = pointLocations[i];
                 var pB = pointLocations[nextIdx];
-                
+
                 var pBIn = pointInVector[nextIdx];
                 var pAOut = pointOutVector[i];
-                
+
                 var line = new BezierSegment
                 {
                     P0 = pA + position,
@@ -313,7 +301,7 @@ namespace Lottie.Vector
                     P2 = pBIn + position,
                     P3 = pB + position
                 };
-                
+
                 lines.Add(line);
             }
 

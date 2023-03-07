@@ -1,0 +1,109 @@
+{
+  "fr": 60,
+  "ip": 0,
+  "op": 60,
+  "w": 512,
+  "h": 512,
+  "ddd": 0,
+  "assets": [],
+  "comps": [],
+  "markers": [],
+  "layers": [
+    {
+      "ddd": 0,
+      "hd": false,
+      "ip": 0,
+      "op": 60,
+      "st": 0,
+      "cp": false,
+      "ks": {},
+      "ao": 0,
+      "hasMask": false,
+      "masksProperties": [],
+      "ef": [],
+      "mb": false,
+      "sy": [],
+      "ty": 4,
+      "shapes": [
+        {
+          "nm": "inner circle",
+          "hd": false,
+          "ty": "el",
+          "p": {
+            "a": 0,
+            "k": [
+              256,
+              256
+            ]
+          },
+          "s": {
+            "a": 0,
+            "k": [
+              64,
+              64
+            ]
+          }
+        },
+        {
+          "nm": "outer circle",
+          "hd": false,
+          "ty": "el",
+          "p": {
+            "a": 0,
+            "k": [
+              256,
+              256
+            ]
+          },
+          "s": {
+            "a": 0,
+            "k": [
+              256,
+              256
+            ]
+          }
+        },
+        {
+          "nm": "black stroke",
+          "hd": false,
+          "ty": "st",
+          "o": {
+            "a": 0,
+            "k": 100
+          },
+          "w": {
+            "a": 0,
+            "k": 8
+          },
+          "d": [],
+          "c": {
+            "a": 0,
+            "k": [
+              0.2,
+              0.2,
+              0.2
+            ]
+          }
+        },
+        {
+          "nm": "orange fill",
+          "hd": false,
+          "ty": "fl",
+          "o": {
+            "a": 0,
+            "k": 100
+          },
+          "c": {
+            "a": 0,
+            "k": [
+              1,
+              0.6,
+              0
+            ]
+          },
+          "r": 2
+        }
+      ]
+    }
+  ]
+}
