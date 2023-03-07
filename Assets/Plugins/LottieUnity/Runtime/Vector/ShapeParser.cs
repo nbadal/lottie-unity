@@ -40,9 +40,15 @@ namespace Lottie.Vector
                         transform = t.Transform.ToMatrix2D(parser._animators);
                         break;
                     case FillShape fl:
+                        if (fl.Opacity.IsAnimated == 1)
+                        {
+                            throw new NotImplementedException();
+                        }
+
                         var fill = new SolidFill
                         {
                             Color = FromLottieColor(fl.Color),
+                            Opacity = ((float?)fl.Opacity.Value ?? 100f) / 100f,
                             Mode = fl.FillRule switch
                             {
                                 FillRule.NonZero => FillMode.NonZero,
@@ -380,7 +386,8 @@ namespace Lottie.Vector
             (
                 (float)color.Value.R,
                 (float)color.Value.G,
-                (float)color.Value.B
+                (float)color.Value.B,
+                (float?)color.Value.A ?? 1f
             );
         }
     }

@@ -1,6 +1,6 @@
 | Shapes                           | Unity |
 |----------------------------------|:-----:|
-| Shape                            |  🔄   |
+| Shape                            |   ✅   |
 | Ellipse                          |   ✅   |
 | Rectangle                        |   ✅   |
 | Rounded Rectangle                |   ✅   |
@@ -10,9 +10,9 @@
 | Trim Path (individually)         |   ❓   |
 | Trim Path (simultaneously)       |   ❓   |
 | **Fills**                        || 
-| Color                            |  🔄   |
-| Opacity                          |   ❓   |
-| Fill Rule                        |   ❓   |
+| Color                            |   ✅   |
+| Opacity                          |   ✅   |
+| Fill Rule                        |   ✅   |
 | Radial Gradient                  |   ❓   |
 | Linear Gradient                  |   ❓   |
 | **Strokes**                      || 
