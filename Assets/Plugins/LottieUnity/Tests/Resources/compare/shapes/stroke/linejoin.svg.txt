@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300"
+     preserveAspectRatio="xMidYMid meet"
+     style="width: 100%; height: 100%; transform: translate3d(0px, 0px, 0px); content-visibility: visible;">
+    <defs>
+        <clipPath id="__lottie_element_734">
+            <rect width="300" height="300" x="0" y="0"></rect>
+        </clipPath>
+    </defs>
+    <g clip-path="url(#__lottie_element_734)">
+        <g transform="matrix(1,0,0,1,0,0)" opacity="1" style="display: block;">
+            <g opacity="1" transform="matrix(1,0,0,1,0,0)">
+                <path stroke-linecap="round" stroke-linejoin="bevel" fill-opacity="0" stroke="rgb(0,0,0)"
+                      stroke-opacity="1" stroke-width="15"
+                      d=" M230,100 C230,100 130,100 130,100 C130,100 130,200 130,200 C130,200 230,200 230,200 C230,200 230,100 230,100z"></path>
+            </g>
+            <g opacity="1" transform="matrix(1,0,0,1,0,0)">
+                <path stroke-linecap="round" stroke-linejoin="miter" fill-opacity="0" stroke-miterlimit="10"
+                      stroke="rgb(0,0,0)" stroke-opacity="1" stroke-width="6"
+                      d=" M160,75 C160,75 60,75 60,75 C60,75 60,225 60,225 C60,225 160,225 160,225 C160,225 160,75 160,75z"></path>
+            </g>
+            <g opacity="1" transform="matrix(1,0,0,1,0,0)">
+                <path stroke-linecap="round" stroke-linejoin="round" fill-opacity="0" stroke="rgb(0,0,0)"
+                      stroke-opacity="1" stroke-width="10"
+                      d=" M110,50 C110,50 10,50 10,50 C10,50 10,250 10,250 C10,250 110,250 110,250 C110,250 110,50 110,50z"></path>
+            </g>
+        </g>
+    </g>
+</svg>

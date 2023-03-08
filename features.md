@@ -16,13 +16,13 @@
 | Radial Gradient                  |   ❓   |
 | Linear Gradient                  |   ❓   |
 | **Strokes**                      || 
-| Color                            |   ❓   | 
-| Opacity                          |   ❓   | 
-| Width                            |   ❓   |
-| Line Cap                         |   ❓   |
-| Line Join                        |   ❓   |
-| Miter Limit                      |   ❓   |
-| Dashes                           |   ❓   |
+| Color                            |   ✅   | 
+| Opacity                          |   ✅   | 
+| Width                            |   ✅   |
+| Line Cap                         |   ✅   |
+| Line Join                        |   ✅   |
+| Miter Limit                      |   ✅   |
+| Dashes                           |   ✅   |
 | Gradient                         |   ❓   |
 | **Transforms**                   || 
 | Position                         |  🔄   |
