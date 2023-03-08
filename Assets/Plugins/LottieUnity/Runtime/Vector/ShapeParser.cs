@@ -12,14 +12,52 @@ namespace Lottie.Vector
     {
         internal static void ParseShapes(this LottieParser parser, List<Shape> shapes, SceneNode layerNode)
         {
-            ParseGroupShapes(parser, shapes, layerNode);
+            var rootElement = ParseGroupShapes(parser, shapes);
+            RenderGroup(rootElement, layerNode);
+        }
+        
+        private static void RenderGroup(GroupElement group, SceneNode node)
+        {
+            var transform = group.Transform;
+            node.Transform = transform;
+
+            foreach (var element in group.Elements)
+            {
+                switch (element)
+                {
+                    case GroupElement gr:
+                        var childNode = new SceneNode
+                        {
+                            Children = new List<SceneNode>()
+                        };
+                        node.Children.Add(childNode);
+                        RenderGroup(gr, childNode);
+                        break;
+                    case { } be:
+                        var shapeNode = new SceneNode();
+                        var shapeCopy = new Unity.VectorGraphics.Shape
+                        {
+                            Contours = be.Contours.ToArray(),
+                            IsConvex = be.IsConvex,
+                        };
+
+                        be.ApplyToShape(ref shapeCopy);
+
+                        node.Children.Add(new SceneNode
+                        {
+                            Shapes = new List<Unity.VectorGraphics.Shape> { shapeCopy },
+                        });
+                        node.Children.Add(shapeNode);
+                        break;
+                }
+            }
         }
 
-        private static void ParseGroupShapes(this LottieParser parser, List<Shape> grShapes, SceneNode groupNode)
+        private static GroupElement ParseGroupShapes(this LottieParser parser, List<Shape> grShapes)
         {
             Matrix2D transform = Matrix2D.identity;
 
-            var shapeStyles = new List<ShapeStyle>();
+            var element = new GroupElement();
 
             // Iterate through shapes in reverse order
             for (var i = grShapes.Count - 1; i >= 0; i--)
@@ -28,12 +66,8 @@ namespace Lottie.Vector
                 switch (shape)
                 {
                     case GroupShape gr:
-                        var innerGroupNode = new SceneNode
-                        {
-                            Children = new List<SceneNode>(),
-                        };
-                        parser.ParseGroupShapes(gr.Shapes, innerGroupNode);
-                        groupNode.Children.Add(innerGroupNode);
+                        var innerGroup = parser.ParseGroupShapes(gr.Shapes);
+                        element.AddGroup(innerGroup);
                         break;
                     case TransformShape t:
                         // TODO: these animators will need to be proxied back to the resulting shape
@@ -57,14 +91,13 @@ namespace Lottie.Vector
                                 _ => throw new ArgumentOutOfRangeException()
                             },
                         };
-                        shapeStyles.Add(new FillStyle(fill));
+                        element.AddElement(new FillElement(fill));
                         break;
                     case StrokeShape st:
                         if (st.StrokeWidth.IsAnimated == 1)
                         {
                             throw new NotImplementedException();
                         }
-
 
                         var patternOffset = 0f;
                         var pattern = st.Dashes == null ? null : MakeDashPattern(st.Dashes, out patternOffset);
@@ -103,8 +136,7 @@ namespace Lottie.Vector
                                 _ => throw new ArgumentOutOfRangeException()
                             },
                         };
-
-                        shapeStyles.Add(new PathStyle(pathProps));
+                        element.AddElement(new PathElement(pathProps));
                         break;
                     case EllipseShape el:
                         if (el.Size.IsAnimated == 1 || el.Position.IsAnimated())
@@ -116,7 +148,7 @@ namespace Lottie.Vector
                         var ellipsePos = new Vector2((float)el.Position.Value[0], (float)el.Position.Value[1]);
                         VectorUtils.MakeEllipseShape(ellipseShape, ellipsePos,
                             (float)el.Size.Value[0] / 2f, (float)el.Size.Value[1] / 2f);
-                        shapeStyles.ForEach(s => s.AddShape(ellipseShape));
+                        element.AddShape(ellipseShape);
                         break;
                     case RectangleShape rc:
                         if (rc.Size.IsAnimated == 1)
@@ -127,7 +159,7 @@ namespace Lottie.Vector
                         var rectShape = new Unity.VectorGraphics.Shape();
 
                         if (CreateRectangleShape(rc, rectShape)) break;
-                        shapeStyles.ForEach(s => s.AddShape(rectShape));
+                        element.AddShape(rectShape);
                         break;
                     case PathShape sh:
                         if (sh.Shape.IsAnimated == 1)
@@ -137,7 +169,7 @@ namespace Lottie.Vector
 
                         var pathShape = new Unity.VectorGraphics.Shape();
                         CreatePathShape(sh, pathShape);
-                        shapeStyles.ForEach(s => s.AddShape(pathShape));
+                        element.AddShape(pathShape);
                         break;
                     case PolystarShape sr:
                         if (sr.Position.IsAnimated() || sr.Points.IsAnimated == 1 || sr.Rotation.IsAnimated == 1 ||
@@ -149,7 +181,7 @@ namespace Lottie.Vector
 
                         var polystarShape = new Unity.VectorGraphics.Shape();
                         CreatePolystarShape(sr, polystarShape);
-                        shapeStyles.ForEach(s => s.AddShape(polystarShape));
+                        element.AddShape(polystarShape);
                         break;
                     case GradientFillShape gf:
                     case GradientStrokeShape gs:
@@ -165,10 +197,8 @@ namespace Lottie.Vector
                         throw new NotImplementedException();
                 }
             }
-
-            shapeStyles.ForEach(s => s.AddToNode(groupNode));
-
-            groupNode.Transform = transform;
+            element.SetTransform(transform);
+            return element;
         }
 
         private static bool CreateRectangleShape(RectangleShape rc, in Unity.VectorGraphics.Shape rectShape)
